@@ -1,0 +1,213 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+        <div class="card shadow-sm">
+
+            <img
+                src="<%= listing.image.url %>"
+                class="card-img-top"
+                alt="Listing Image"
+                style="height: 22rem; object-fit: cover;"
+            >
+
+            <div class="card-body">
+
+                <h3 class="card-title mb-2">
+                    <%= listing.title %>
+                </h3>
+
+                <% if (listing.owner) { %>
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-circle-user fa-2x text-secondary me-3"></i>
+
+                            <div>
+                                <h6 class="mb-0">
+                                    Hosted by <%= listing.owner.username %>
+                                </h6>
+                                <small class="text-muted">
+                                    TravelFun Host
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                <p class="card-text text-muted">
+                    <%= listing.description %>
+                </p>
+
+                <h5 class="mb-3">
+                    &#8377;
+                    <%= listing.price != null
+                        ? listing.price.toLocaleString("en-IN")
+                        : "Price not available" %>
+                    / night
+                </h5>
+
+                <p class="mb-1">
+                    <strong>Location:</strong>
+                    <%= listing.location %>
+                </p>
+
+                <p class="mb-4">
+                    <strong>Country:</strong>
+                    <%= listing.country %>
+                </p>
+
+                <!-- MAP SECTION -->
+                <div class="mt-4">
+                    <h5>Where you'll be</h5>
+                    <div id="map"></div>
+                </div>
+
+                <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+
+                    <div class="d-flex gap-2 mt-4">
+
+                        <a
+                            href="/listings/<%= listing._id %>/edit"
+                            class="btn btn-dark"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            action="/listings/<%= listing._id %>?_method=DELETE"
+                            method="POST"
+                        >
+                            <button class="btn btn-danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Review Form -->
+
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+        <h3 class="mb-3">Leave a Review</h3>
+
+        <form action="/listings/<%= listing._id %>/reviews" method="POST">
+
+            <div class="mb-3">
+                <label for="rating" class="form-label">
+                    Rating
+                </label>
+
+                <input
+                    type="range"
+                    class="form-range"
+                    min="1"
+                    max="5"
+                    value="3"
+                    id="rating"
+                    name="review[rating]"
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="comment" class="form-label">
+                    Comment
+                </label>
+
+                <textarea
+                    class="form-control"
+                    id="comment"
+                    name="review[comment]"
+                    rows="4"
+                    placeholder="Write your review..."
+                    required
+                ></textarea>
+            </div>
+
+            <button class="btn btn-dark">
+                Submit Review
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- Reviews Section -->
+
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+        <h3 class="mb-3">All Reviews</h3>
+
+        <% if(listing.reviews.length > 0) { %>
+
+            <% for(let review of listing.reviews) { %>
+
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">
+                                <i class="fa-solid fa-user"></i>
+                                <%= review.author.username %>
+                            </h6>
+
+                            <span class="text-warning">
+                                <%= "★".repeat(review.rating) %><%= "☆".repeat(5 - review.rating) %>
+                            </span>
+                        </div>
+
+                        <p class="card-text">
+                            <%= review.comment %>
+                        </p>
+
+                        <small class="text-muted d-block mb-3">
+                            <%= review.createdAt.toLocaleDateString("en-IN", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric"
+                            }) %>
+                        </small>
+
+                        <form
+                            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                            method="POST"
+                        >
+                            <button class="btn btn-sm btn-danger">
+                                Delete Review
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            <% } %>
+
+        <% } else { %>
+
+            <p class="text-muted">
+                No reviews yet. Be the first to review this listing!
+            </p>
+
+        <% } %>
+
+    </div>
+</div>
+
+<!-- MAP DATA -->
+
+<script>
+    window.coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+    window.locationName = "<%= listing.location %>, <%= listing.country %>";
+</script>

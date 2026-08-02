@@ -1,0 +1,122 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- FILTER BAR -->
+
+<div class="filters mb-4">
+
+    <div class="filter">
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-mountain"></i>
+        <p>Mountains</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-water"></i>
+        <p>Beach</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-city"></i>
+        <p>City</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-tent"></i>
+        <p>Camping</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-snowflake"></i>
+        <p>Arctic</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-tractor"></i>
+        <p>Farm</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-landmark"></i>
+        <p>Historical</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-tree"></i>
+        <p>Forest</p>
+    </div>
+
+    <div class="filter">
+        <i class="fa-solid fa-filter"></i>
+        <p>Filters</p>
+    </div>
+
+</div>
+
+<!-- LISTINGS -->
+
+<% if(allListings.length > 0){ %>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+
+    <% for(let listing of allListings){ %>
+
+    <div class="col">
+
+        <a class="listing-link" href="/listings/<%= listing._id %>">
+
+            <div class="card listing-card h-100">
+
+                <img
+                    src="<%= listing.image.url %>"
+                    class="card-img-top"
+                    alt="listing_image"
+                >
+
+                <div class="card-img-overlay"></div>
+
+                <div class="card-body">
+
+                    <p class="card-text mb-1">
+                        <b><%= listing.title %></b>
+                    </p>
+
+                    <p class="text-muted">
+                        &#8377;
+                        <%= listing.price.toLocaleString("en-IN") %> / night
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <% } %>
+
+</div>
+
+<% } else { %>
+
+<div class="text-center mt-5 mb-5">
+
+    <i class="fa-solid fa-magnifying-glass fa-4x text-secondary mb-3"></i>
+
+    <h3>No Listings Found</h3>
+
+    <p class="text-muted">
+        We couldn't find any listings matching your search.
+    </p>
+
+    <a href="/listings" class="btn btn-dark mt-2">
+        View All Listings
+    </a>
+
+</div>
+
+<% } %>

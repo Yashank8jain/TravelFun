@@ -1,0 +1,97 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+        <h3 class="mb-4">Edit Listing</h3>
+
+        <form
+            action="/listings/<%= listing._id %>?_method=PUT"
+            method="POST"
+            enctype="multipart/form-data"
+            class="needs-validation"
+            novalidate
+        >
+
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input
+                    type="text"
+                    name="listing[title]"
+                    value="<%= listing.title %>"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea
+                    name="listing[description]"
+                    rows="4"
+                    class="form-control"
+                    required
+                ><%= listing.description %></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Current Image</label><br>
+                <img
+                    src="<%= listing.image.url %>"
+                    alt="Current Image"
+                    class="img-fluid rounded mb-3"
+                    style="max-height: 250px;"
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Upload New Image</label>
+                <input
+                    type="file"
+                    name="listing[image]"
+                    class="form-control"
+                    accept="image/*"
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input
+                    type="number"
+                    name="listing[price]"
+                    value="<%= listing.price %>"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Location</label>
+                <input
+                    type="text"
+                    name="listing[location]"
+                    value="<%= listing.location %>"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Country</label>
+                <input
+                    type="text"
+                    name="listing[country]"
+                    value="<%= listing.country %>"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-dark">
+                Update Listing
+            </button>
+
+        </form>
+
+    </div>
+</div>
